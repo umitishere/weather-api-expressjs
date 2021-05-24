@@ -10,9 +10,15 @@ app.get("/", (req, res) => {
 
     https.get(url, (response) => {
         console.log(response.statusCode);
-    });
 
-    res.send("Server is running");
+        response.on("data", (data) => {
+            const weatherData = JSON.parse(data);
+            const temp = weatherData.main.temp;
+            const weatherDescription = weatherData.weather[0].description;
+
+            res.send("The temperature in Istanbul is " + temp + " degrees Celcius.");
+        });
+    });
 
 });
 
